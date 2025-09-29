@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Блог{% endblock %}</title>
+</head>
+<body>
+  <nav>
+    <a href="{% url 'home' %}">Головна</a> |
+    <a href="{% url 'articles-list' %}">Публікації</a>
+  </nav>
+  <hr>
+
+  {% block content %}
+  {% endblock %}
+</body>
+</html>
