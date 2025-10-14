@@ -1,39 +1,31 @@
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-    <a href="{% url 'home' %}">← На головну</a>
-    <meta charset="UTF-8">
-    <title>Публікації</title>
-</head>
-<body>
-    <h2>Публікації</h2>
-    
-    {% if category %}
-        <h3>Категорія: {{ category }}</h3>
-    {% endif %}
+{% extends "base.html" %}
+{% load static %}
 
-    {% for item in items %}
-        <div class="articles-row">
-            <a href="{{ item.get_absolute_url }}">
-                <h4>{{ item.title }}</h4>
-            </a>
-            <h5>
-                {{ item.pub_date|date:"j E Y" }}
-            </h5>
-            <p>
-                {{ item.description|truncatewords:32 }}
-            </p>
+{% block content %}
+<h1 class="text-center mb-4">Публікації</h1>
 
-            {% if item.images.all %}
-                <div class="container-image">
-                    <img class="img" src="{{ item.images.first.image.url }}" alt="{{ item.title }}">
-                </div>
-            {% endif %}
+{% if category %}
+    <h3 class="text-center mb-4">Категорія: {{ category }}</h3>
+{% endif %}
 
-            <div class="clearfix"></div>
-        </div>
-    {% empty %}
-        <p>Немає публікацій.</p>
-    {% endfor %}
-</body>
-</html>
+{% for item in items %}
+    <article class="article-block">
+        {% if item.images.all %}
+            <div class="container-image mb-3">
+                <img class="img-fluid rounded" src="{{ item.images.first.image.url }}" alt="{{ item.title }}">
+            </div>
+        {% endif %}
+        <h2><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></h2>
+        <p class="text-muted mb-2">{{ item.pub_date|date:"j E Y" }}</p>
+        <p>{{ item.description|striptags|truncatewords_html:32 }}</p>
+    </article>
+{% empty %}
+    <div class="article-block text-center">
+        <p>Немає публікацій у цій категорії.</p>
+    </div>
+{% endfor %}
+
+<div class="text-center mt-4">
+    <a href="{% url 'home' %}" class="btn btn-secondary">← На головну</a>
+</div>
+{% endblock %}
